@@ -1,1 +1,1 @@
-Tranformada Rápida de Furier
+Laboratorio PSIM 2025
