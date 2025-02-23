@@ -1,13 +1,18 @@
-import numpy as np
+import math
 import matplotlib.pyplot as plt
 
 def TF(señal):
     N = len(señal)
-    valores = np.zeros(N, dtype=complex)
+    valores = [0] * N
     for k in range(N):
+        real = 0
+        imag = 0
         for n in range(N):
-            valores[k] += señal[n] * np.exp(-2j * np.pi * k * n / N)
-    freq = np.arange(N)
+            angle = -2 * math.pi * k * n / N
+            real += señal[n] * math.cos(angle)
+            imag += señal[n] * math.sin(angle)
+        valores[k] = complex(real, imag)
+    freq = list(range(N))
     return freq, valores
 
 def Graficar_señales_TF(señal, freq, valores):
@@ -23,15 +28,17 @@ def Graficar_señales_TF(señal, freq, valores):
     
     # Plot DFT Magnitude
     plt.subplot(3, 1, 2)
-    plt.plot(freq[:len(freq)//2], np.abs(valores[:len(freq)//2]), label='Magnitud DFT')
+    magnitudes = [math.sqrt(v.real**2 + v.imag**2) for v in valores]
+    plt.plot(freq[:len(freq)//2], magnitudes[:len(freq)//2], label='Magnitud DFT')
     plt.xlabel('Frecuencia [Hz]')
     plt.ylabel('Magnitud')
     plt.title('Magnitud de la Transformada de Fourier Discreta (DFT)')
     plt.legend()
     
     # Plot DFT Phase
+    fases = [math.atan2(v.imag, v.real) for v in valores]
     plt.subplot(3, 1, 3)
-    plt.plot(freq[:len(freq)//2], np.angle(valores[:len(freq)//2]), label='Fase DFT')
+    plt.plot(freq[:len(freq)//2], fases[:len(freq)//2], label='Fase DFT')
     plt.xlabel('Frecuencia [Hz]')
     plt.ylabel('Fase [radianes]')
     plt.title('Fase de la Transformada de Fourier Discreta (DFT)')
@@ -40,8 +47,8 @@ def Graficar_señales_TF(señal, freq, valores):
     plt.tight_layout()
     plt.show()
 
-# Señal de entrada (se asume que ya está definida)
-señal = np.array([1,2,3,1,1,2])  # Reemplazar con la señal real
+# Señal de entrada
+señal = [1, 2, 3, 1, 1, 2]  # Reemplazar con la señal real
 
 # Calcular DFT
 freq, datos = TF(señal)
