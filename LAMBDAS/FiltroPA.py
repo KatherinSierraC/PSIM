@@ -1,6 +1,6 @@
 import json
 
-def filtro_pasa_bajas(fourier_data, cutoff):
+def filtro_pasa_altas(fourier_data, cutoff):
     print(f"Datos recibidos en filtro: {json.dumps(fourier_data)}")  # 🛠 Log de entrada
     valores = fourier_data[:]  # Copia la lista para evitar modificar la original
     N = len(valores)
@@ -21,6 +21,7 @@ def filtro_pasa_bajas(fourier_data, cutoff):
     print(f"Datos después del filtro: {json.dumps(valores)}")  # 🛠 Log de salida
     return valores
 
+
 def lambda_handler(event, context):
     try:
         print(f"Evento recibido en filtro pasa-bajas: {json.dumps(event)}")  # Log de entrada
@@ -31,7 +32,7 @@ def lambda_handler(event, context):
         if not isinstance(fourier_data, list) or not all(isinstance(x, dict) and "real" in x and "imag" in x for x in fourier_data):
             raise ValueError(f"Formato de 'fourier_data' incorrecto: {fourier_data}")
 
-        resultado = filtro_pasa_bajas(fourier_data, cutoff)
+        resultado = filtro_pasa_altas(fourier_data, cutoff)
 
         print(f"Señal filtrada generada: {json.dumps(resultado)}")  # Log de salida
 
