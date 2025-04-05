@@ -9,7 +9,7 @@ def cargar_imagen(ruta, redimensionar=(256, 256)):
         img = img.resize(redimensionar)
     return np.array(img)
 
-def añadir_ruido_alta_frecuencia(img, sigma=30, umbral_diff=50):
+def añadir_ruido_alta_frecuencia(img, sigma=40, umbral_diff=15):
     """Añade ruido gaussiano solo en bordes/texturas (alta frecuencia)."""
     noisy_img = img.copy()
     h, w = noisy_img.shape
@@ -22,30 +22,37 @@ def añadir_ruido_alta_frecuencia(img, sigma=30, umbral_diff=50):
                 noisy_img[x, y] = np.clip(noisy_img[x, y] + ruido, 0, 255)
     return noisy_img
 
-def aplicar_filtro_disco(img, radio=50 ):
+def aplicar_filtro_disco(img, radio=50):
     """Aplica filtro de disco en el dominio de Fourier."""
+    # Transformada de Fourier
     fft = np.fft.fftshift(np.fft.fft2(img))
+    
+    # Crear máscara de disco
     h, w = img.shape
     Y, X = np.ogrid[:h, :w]
     centro = (h//2, w//2)
     mascara = (X - centro[1])**2 + (Y - centro[0])**2 <= radio**2
+    
+    # Aplicar filtro y transformada inversa
     fft_filtrado = fft * mascara
-    return np.abs(np.fft.ifft2(np.fft.ifftshift(fft_filtrado))).astype(np.uint8)
+    img_filtrada = np.abs(np.fft.ifft2(np.fft.ifftshift(fft_filtrado)))
+    
+    return img_filtrada.astype(np.uint8)
 
-# --- Parámetros ajustables ---
-ruta_imagen = "eco_bebe.jpg"  
-sigma_ruido = 40               # Intensidad del ruido (30-50)
-umbral_borde = 15              # Sensibilidad a bordes (10-20)
-radio_filtro = 50              # Radio del filtro (20-30)
+# --- Parámetros ---
+ruta_imagen = r"C:\\Users\\Usuario\\Desktop\\Universidad\\PSIM\\PSIM-1\\IMAGENES\\eco_bebe.jpg"
+sigma_ruido = 40              # Intensidad del ruido
+umbral_borde = 15             # Sensibilidad para detectar bordes
+radio_filtro = 50             # Radio del filtro de disco
 
 # --- Proceso completo ---
-# 1. Cargar y preparar imagen
+# 1. Cargar imagen
 original = cargar_imagen(ruta_imagen)
 
 # 2. Añadir ruido en altas frecuencias
 img_con_ruido = añadir_ruido_alta_frecuencia(original, sigma=sigma_ruido, umbral_diff=umbral_borde)
 
-# 3. Aplicar filtro de disco
+# 3. Aplicar filtro de disco (FFT + filtro + IFFT)
 img_filtrada = aplicar_filtro_disco(img_con_ruido, radio=radio_filtro)
 
 # --- Visualización ---
