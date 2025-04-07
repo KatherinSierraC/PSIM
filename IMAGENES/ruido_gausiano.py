@@ -32,10 +32,10 @@ def añadir_ruido_gaussiano_alta_frecuencia(img, sigma=25, umbral_borde=30):
     return img
 
 # --- Ejemplo de uso ---
-imagen_original = cargar_imagen_grises("foto_prueba.jpg")
+imagen_original = cargar_imagen_grises("C:\\Users\\Usuario\\Desktop\\Universidad\\PSIM\\PSIM-1\\IMAGENES\\eco_bebe.jpg")
 imagen_con_ruido = añadir_ruido_gaussiano_alta_frecuencia(
     imagen_original.copy(),
-    sigma=100,       # Intensidad del ruido
+    sigma= 100,       # Intensidad del ruido
     umbral_borde=20  # Ajusta para detectar más/menos bordes
 )
 imagen_con_ruido.save("imagen_con_ruido_alta_frecuencia.jpg")

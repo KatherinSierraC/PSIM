@@ -43,7 +43,7 @@ def aplicar_filtro_disco(img, radio=50):
 ruta_imagen = r"C:\\Users\\Usuario\\Desktop\\Universidad\\PSIM\\PSIM-1\\IMAGENES\\eco_bebe.jpg"
 sigma_ruido = 40              # Intensidad del ruido
 umbral_borde = 15             # Sensibilidad para detectar bordes
-radio_filtro = 50             # Radio del filtro de disco
+radio_filtro = 100             # Radio del filtro de disco
 
 # --- Proceso completo ---
 # 1. Cargar imagen

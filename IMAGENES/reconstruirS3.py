@@ -5,7 +5,7 @@ import io
 
 # Parámetros de S3
 bucket_name = 'pruebapsim'  # Cambia esto por el nombre de tu bucket
-object_key = 'filtered_salidas/imagen_ruido.npy'  # Cambia esto por el nombre real en tu S3
+object_key = 'filtered_ecografia.npy'  # Cambia esto por el nombre real en tu S3
 
 # Cliente S3
 s3 = boto3.client('s3')
